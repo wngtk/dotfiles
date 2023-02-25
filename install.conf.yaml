@@ -5,4 +5,5 @@
 - clean: []
 - link:
     ~/.vimrc: vimrc
+    ~/.tmux.conf: tmux.conf
 - shell: []
