@@ -6,4 +6,5 @@
 - link:
     ~/.vimrc: vimrc
     ~/.tmux.conf: tmux.conf
-- shell: []
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
