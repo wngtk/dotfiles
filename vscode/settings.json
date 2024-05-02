@@ -1,0 +1,43 @@
+{
+    "vim.leader": "<Space>",
+    "vim.handleKeys": {
+        "<C-p>": false,
+        "<C-k>": false,
+        "<C-j>": false
+    },
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["J"],
+            "commands": ["editor.action.moveLinesDownAction"]
+        },
+        {
+            "before": ["K"],
+            "commands": ["editor.action.moveLinesUpAction"]
+        }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["J"],
+            "commands": ["editor.action.moveLinesDownAction"]
+        },
+        {
+            "before": ["K"],
+            "commands": ["editor.action.moveLinesUpAction"]
+        }
+    ],
+    "vim.smartRelativeLine": true,
+    "vim.sneakUseIgnorecaseAndSmartcase": true,
+    "vim.sneak": true,
+    "vim.easymotion": true,
+    "vim.targets.enable": true,
+    "vim.enableNeovim": true,
+    "vim.vimrc.enable": true,
+    "remote.extensionKind": {
+        "vscodevim.vim": [
+            "workspace"
+        ]
+    },
+    "extensions.experimental.affinity": {
+        "vscodevim.vim": 1
+    }
+}

@@ -1,0 +1,66 @@
+vnoremap <C-h> :nohlsearch<cr>
+nnoremap <C-h> :nohlsearch<cr>
+
+" Movement
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" move vertically by visual line
+nnoremap j gj
+nnoremap k gk
+" highlight last inserted text
+nnoremap gV `[v`]
+
+" Jump to start and end of line using the home row keys
+map H ^
+map L $
+
+" (Shift)Tab (de)indents code
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+
+" Search results centered please
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+nnoremap <silent> * *zz
+nnoremap <silent> # #zz
+nnoremap <silent> g* g*zz
+nnoremap <C-o> <C-o>zz
+nnoremap <C-i> <C-i>zz
+
+"  w wq q   --  Quick Save
+nmap <Leader>w :w<CR>
+nmap <Leader>q :q<CR>
+nmap <Leader>wq :wq<CR>
+nmap <Leader>Q :q!<CR>
+
+"  y d p P   --  Quick copy paste into system clipboard
+nmap <Leader>y "+y
+nmap <Leader>d "+d
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+
+" numbers
+nnoremap <Leader>1 1gt<CR>
+nnoremap <Leader>2 2gt<CR>
+nnoremap <Leader>3 3gt<CR>
+nnoremap <Leader>4 4gt<CR>
+nnoremap <Leader>5 5gt<CR>
+nnoremap <Leader>6 6gt<CR>
+nnoremap <Leader>7 7gt<CR>
+nnoremap <Leader>8 8gt<CR>
+nnoremap <Leader>9 9gt<CR>
+nnoremap <Leader>n :tabnew<CR>
+nnoremap <Leader>x :tabclose<CR>
+
+" easymotion
+map <Leader>h <Leader><Leader>h
+map <Leader>j <Leader><Leader>j
+map <Leader>k <Leader><Leader>k
+map <Leader>l <Leader><Leader>l
+
+map <Leader>/ <Leader><Leader>/
+map <Leader>s <Leader><Leader>2s
+map <Leader>f <Leader><Leader>s
