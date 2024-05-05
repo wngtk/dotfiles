@@ -4,8 +4,10 @@
 
 - clean: ['~']
 - link:
-    ~/.tmux.conf: tmux.conf
-    ~/.vscodevimrc: vscodevimrc
-    ~/.inputrc: inputrc
+    ~/.tmux.conf:
+    ~/.vscodevimrc:
+    ~/.inputrc:
+    ~/.vim:
+    ~/.vimrc:
 - shell:
     - [git submodule update --init --recursive, Installing submodules]

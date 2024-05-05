@@ -1,3 +1,27 @@
 [submodule "dotbot"]
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot.git
+[submodule "vim/pack/vendor/start/vim-easymotion"]
+	path = vim/pack/vendor/start/vim-easymotion
+	url = https://github.com/easymotion/vim-easymotion
+[submodule "vim/pack/vendor/start/vim-sneak"]
+	path = vim/pack/vendor/start/vim-sneak
+	url = https://github.com/justinmk/vim-sneak
+[submodule "vim/pack/vendor/start/vim-commentary"]
+	path = vim/pack/vendor/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary
+[submodule "vim/pack/vendor/start/vim-surround"]
+	path = vim/pack/vendor/start/vim-surround
+	url = https://github.com/tpope/vim-surround
+[submodule "vim/pack/vendor/start/CamelCaseMotion"]
+	path = vim/pack/vendor/start/CamelCaseMotion
+	url = https://github.com/bkad/CamelCaseMotion.git
+[submodule "vim/pack/vendor/start/vim-textobj-entire"]
+	path = vim/pack/vendor/start/vim-textobj-entire
+	url = https://github.com/kana/vim-textobj-entire.git
+[submodule "vim/pack/vendor/start/vim-textobj-user"]
+	path = vim/pack/vendor/start/vim-textobj-user
+	url = https://github.com/kana/vim-textobj-user.git
+[submodule "vim/pack/vendor/start/targets.vim"]
+	path = vim/pack/vendor/start/targets.vim
+	url = https://github.com/wellle/targets.vim.git

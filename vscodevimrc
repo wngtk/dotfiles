@@ -64,3 +64,6 @@ map <Leader>l <Leader><Leader>l
 map <Leader>/ <Leader><Leader>/
 map <Leader>s <Leader><Leader>2s
 map <Leader>f <Leader><Leader>s
+
+" CamelCaseMotion
+nmap <Leader>m c<Leader>e

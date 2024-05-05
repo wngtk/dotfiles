@@ -30,6 +30,7 @@
     "vim.sneak": true,
     "vim.easymotion": true,
     "vim.targets.enable": true,
+    "vim.camelCaseMotion.enable": true,
     "vim.enableNeovim": true,
     "vim.vimrc.enable": true,
     "remote.extensionKind": {
