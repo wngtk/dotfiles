@@ -126,6 +126,9 @@ for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 
 
+### "nvim" as manpager
+export MANPAGER="nvim +Man!"
+
 # Allow private customizations (not checked in to version control)
 if [ -f ~/.shell_private ]; then
     source ~/.shell_private

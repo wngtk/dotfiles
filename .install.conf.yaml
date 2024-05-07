@@ -1,6 +1,7 @@
 - defaults:
     link:
       relink: true
+      force: true
 
 - clean: ['~']
 - link:
@@ -13,5 +14,6 @@
     ~/.zshrc:
     ~/.zimrc:
     ~/.zprofile:
+    ~/.config/fish/config.fish: fish/config.fish
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
