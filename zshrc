@@ -1,5 +1,8 @@
 ZIM_HOME=~/.zim
 
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 # -----------------
 # Zsh configuration
 # -----------------
