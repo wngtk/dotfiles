@@ -4,6 +4,7 @@ abbr -a m make
 abbr -a g git
 abbr -a gc 'git checkout'
 abbr -a ga 'git add -p'
+abbr -a gs 'git status'
 abbr -a vimdiff 'nvim -d'
 
 set fish_greeting	 # Supresses fish's intro message
@@ -12,9 +13,12 @@ fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
 
 if status --is-interactive
 	# Commands to run in interactive sessions can go here
-	if ! set -q TMUX
+	if ! set -q TMUX; and not set -q VSCODE_IPC_HOOK_CLI
 		exec tmux
 	end
+    if command -v starship > /dev/null
+	    starship init fish | source
+    end
 end
 
 if command -v apt > /dev/null
