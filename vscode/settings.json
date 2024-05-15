@@ -5,26 +5,6 @@
         "<C-k>": false,
         "<C-j>": false
     },
-    "vim.normalModeKeyBindings": [
-        {
-            "before": ["J"],
-            "commands": ["editor.action.moveLinesDownAction"]
-        },
-        {
-            "before": ["K"],
-            "commands": ["editor.action.moveLinesUpAction"]
-        }
-    ],
-    "vim.visualModeKeyBindingsNonRecursive": [
-        {
-            "before": ["J"],
-            "commands": ["editor.action.moveLinesDownAction"]
-        },
-        {
-            "before": ["K"],
-            "commands": ["editor.action.moveLinesUpAction"]
-        }
-    ],
     "vim.smartRelativeLine": true,
     "vim.sneakUseIgnorecaseAndSmartcase": true,
     "vim.sneak": true,
