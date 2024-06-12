@@ -7,7 +7,9 @@ if status --is-interactive
     set fish_greeting
 end
 
-if test -f /home/wngtk/.autojump/share/autojump/autojump.fish; . /home/wngtk/.autojump/share/autojump/autojump.fish; end
+if test -f /home/wngtk/.autojump/share/autojump/autojump.fish
+	. /home/wngtk/.autojump/share/autojump/autojump.fish
+end
 
 # Type - to move up to top parent dir which is a repository
 function d
