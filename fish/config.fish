@@ -15,10 +15,6 @@ fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
 
 if status --is-interactive
 	set fish_greeting
-
-	if ! set -q TMUX; and ! set -q WSLENV
-		exec tmux
-	end
 end
 
 if test -f $HOME/.autojump/share/autojump/autojump.fish

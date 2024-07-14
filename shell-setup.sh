@@ -15,20 +15,13 @@ function pull_repo() {
     cd -
 }
 
-NVIM=$HOME/.neovim
-mkdir -p $NVIM
-
-if command -v nvim > /dev/null; then
-    echo "NVIM appears to be installed"
-else
-    mkdir -p $NVIM/bin
-    cd $NVIM/bin
-    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-    chmod u+x nvim.appimage
-    mv nvim.appimage nvim
+# AUTOJUMP
+if [[ ! -d $HOME/.autojump/ ]]; then
+    git clone https://github.com/wting/autojump.git /tmp/autojump
+    cd /tmp/autojump
+    ./install.py
     cd -
 fi
-
 
 # FZF
 if [[ ! -f $HOME/.fzf/bin/fzf ]]; then
@@ -44,7 +37,7 @@ if [[ ! -d $HOME/.rustup ]]; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
 
-for crate in bat fd-find ripgrep eza
+for crate in bat fd-find ripgrep eza tealdeer
 do
     $HOME/.cargo/bin/cargo install $crate
 done
