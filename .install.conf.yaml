@@ -10,10 +10,6 @@
     ~/.vscodevimrc:
     ~/.vim:
     ~/.vimrc:
-    ~/.zsh:
-    ~/.zshrc:
-    ~/.zimrc:
-    ~/.zprofile:
     ~/.config/fish/config.fish: fish/config.fish
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
