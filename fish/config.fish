@@ -15,10 +15,14 @@ fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
 
 if status --is-interactive
 	set fish_greeting
+
+	if ! set -q TMUX; and ! set -q WSLENV
+		exec tmux
+	end
 end
 
-if test -f /home/wngtk/.autojump/share/autojump/autojump.fish
-	. /home/wngtk/.autojump/share/autojump/autojump.fish
+if test -f $HOME/.autojump/share/autojump/autojump.fish
+	. $HOME/.autojump/share/autojump/autojump.fish
 end
 
 # Type - to move up to top parent dir which is a repository
