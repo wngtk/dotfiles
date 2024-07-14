@@ -10,7 +10,7 @@ if command -v eza > /dev/null
 	abbr -a lll 'eza -la'
 end
 
-# set -x MANPAGER "nvim +Man!"
+set -x MANPAGER "nvim +Man!"
 fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
 
 if status --is-interactive
