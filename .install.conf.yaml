@@ -11,5 +11,6 @@
     ~/.vim:
     ~/.vimrc:
     ~/.config/fish/config.fish: fish/config.fish
+    ~/.config/nvim: editor/.config/nvim
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
