@@ -11,6 +11,7 @@ if command -v eza > /dev/null
 end
 
 set -x MANPAGER "nvim +Man!"
+set -x EDITOR nvim
 fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
 
 if status --is-interactive
