@@ -20,5 +20,6 @@
     },
     "extensions.experimental.affinity": {
         "vscodevim.vim": 1
-    }
+    },
+    "editor.fontFamily": "'SauceCodePro Nerd Font', Consolas, 'Courier New', monospace"
 }
