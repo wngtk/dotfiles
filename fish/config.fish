@@ -2,6 +2,7 @@ abbr -a e nvim
 abbr -a m make
 abbr -a g git
 abbr -a gs git status
+abbr -a gl git log --oneline
 
 if command -v eza > /dev/null
 	abbr -a l 'eza'
