@@ -157,3 +157,12 @@ require("lazy").setup({
 		end
 	},
 })
+
+-------------------------------------------------------------------------------
+--
+-- local customizations
+--
+-------------------------------------------------------------------------------
+-- local customizations in ~/.config/nvim/lua/local-settings/init.lua
+-- https://neovim.io/doc/user/lua.html#_importing-lua-modules
+require("local-settings")
