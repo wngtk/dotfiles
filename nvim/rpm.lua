@@ -1,79 +1,62 @@
--- Abbrevations for rpm
-vim.cmd [[
-" function! GetSpecInfo()
-"     " Get the current buffer number
-"     let l:bufnr = bufnr('%')
-"
-"     " Initialize version and release variables
-"     let l:version = ''
-"     let l:release = ''
-"
-"     " Iterate over the lines in the buffer
-"     for l:num in range(1, line('$'))
-"         let l:line = getline(l:num)
-"
-"         " Check if the line contains the version
-"         if l:line =~ '^Version:'
-"             let l:version = substitute(l:line, '^Version:\s*', '', '')
-"         " Check if the line contains the release
-"         elseif l:line =~ '^Release:'
-"             let l:release = substitute(l:line, '^Release:\s*', '', '')
-"             " Remove %{?dist} from the release string
-"             let l:release = substitute(l:release, '%{?dist}', '', '')
-"         endif
-"     endfor
-"
-"     " Return the version and release
-"     return l:version . '-' . l:release
-" endfunction
+local function get_spec_info(filepath)
+    -- Initialize version and release variables
+    local version = ''
+    local release = ''
+    local lines = {}
 
-function! GetSpecInfo(filepath='')
-    " Initialize version and release variables
-    let l:version = ''
-    let l:release = ''
-    let l:lines = []
-
-    " Read lines from the specified file or the current buffer
-    if a:filepath != ''
-        if filereadable(a:filepath)
-            let l:lines = readfile(a:filepath)
+    -- Read lines from the specified file or the current buffer
+    if filepath and filepath ~= '' then
+        local file = io.open(filepath, 'r')
+        if file then
+            for line in file:lines() do
+                table.insert(lines, line)
+            end
+            file:close()
         else
-            echo "File not readable: " . a:filepath
+            print('File not readable: ' .. filepath)
             return ''
-        endif
+        end
     else
-        let l:lines = getline(1, '$')
-    endif
+        for _, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
+            table.insert(lines, line)
+        end
+    end
 
-    " Iterate over the lines
-    for l:line in l:lines
-        " Check if the line contains the version
-        if l:line =~ '^Version:'
-            let l:version = substitute(l:line, '^Version:\s*', '', '')
-        " Check if the line contains the release
-        elseif l:line =~ '^Release:'
-            let l:release = substitute(l:line, '^Release:\s*', '', '')
-            " Remove %{?dist} from the release string
-            let l:release = substitute(l:release, '%{?dist}', '', '')
-        endif
-    endfor
+    -- Iterate over the lines
+    for _, line in ipairs(lines) do
+        -- Check if the line contains the version
+        if line:match('^Version:') then
+            version = line:gsub('^Version:%s*', '')
+        -- Check if the line contains the release
+        elseif line:match('^Release:') then
+            release = line:gsub('^Release:%s*', ''):gsub('%%{%?dist}', '')
+        end
+    end
 
-    " Return the version and release
-    return l:version . '-' . l:release
-endfunction
+    -- Return the version and release
+    return version .. '-' .. release
+end
 
-function! UpstreamSpecPath()
-    " Get the current working directory
-    let l:pwd = getcwd()
-    " Get the base name of the current working directory
-    let l:basename = fnamemodify(l:pwd, ':t')
-    " Construct the file path
-    let l:filepath = l:pwd . '/upstream/' . l:basename . '.spec'
+local function upstream_spec_path()
+    -- Get the current working directory
+    local pwd = vim.fn.getcwd()
+    -- Get the base name of the current working directory
+    local basename = vim.fn.fnamemodify(pwd, ':t')
+    -- Construct the file path
+    local filepath = pwd .. '/upstream/' .. basename .. '.spec'
 
-    return l:filepath
-endfunction
+    return filepath
+end
 
-" language time en_US.UTF8
-iab <expr> dst strftime("%a %b %d %Y") . " Wang Tiaoke <wangtiaoke@cqsoftware.com.cn> - " . GetSpecInfo()
-iab <expr> vst GetSpecInfo(UpstreamSpecPath())
-]]
+-- Make the Lua functions available to Vimscript
+_G.get_spec_info = get_spec_info
+_G.upstream_spec_path = upstream_spec_path
+
+-- Set up the abbreviations
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'spec,gitcommit',
+    callback = function()
+        vim.cmd('iabbrev <expr> <buffer> dst strftime("%a %b %d %Y") .. " Wang Tiaoke <wangtiaoke@cqsoftware.com.cn> - " .. v:lua.get_spec_info()')
+        vim.cmd('iabbrev <expr> <buffer> vst v:lua.get_spec_info(v:lua.upstream_spec_path())')
+    end,
+})
