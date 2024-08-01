@@ -165,4 +165,11 @@ require("lazy").setup({
 -------------------------------------------------------------------------------
 -- local customizations in ~/.config/nvim/lua/local-settings/init.lua
 -- https://neovim.io/doc/user/lua.html#_importing-lua-modules
-require("local-settings")
+local function module_exists(name)
+    local status, _ = pcall(require, name)
+    return status
+end
+
+if module_exists("local-settings") then
+    require("local-settings")
+end
