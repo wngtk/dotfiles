@@ -18,6 +18,10 @@ fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
 
 if status --is-interactive
 	set fish_greeting
+    # Allow local customizations
+    if test -e "$HOME/.config/fish/config_local_after.fish"
+        builtin source "$HOME/.config/fish/config_local_after.fish"
+    end
 end
 
 if test -f $HOME/.autojump/share/autojump/autojump.fish
