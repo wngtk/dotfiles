@@ -56,6 +56,7 @@ _G.upstream_spec_path = upstream_spec_path
 vim.api.nvim_create_autocmd('FileType', {
     pattern = 'spec,gitcommit',
     callback = function()
+        vim.cmd('language time en_US.UTF-8')
         vim.cmd('iabbrev <expr> <buffer> dst strftime("%a %b %d %Y") .. " Wang Tiaoke <wangtiaoke@cqsoftware.com.cn> - " .. v:lua.get_spec_info()')
         vim.cmd('iabbrev <expr> <buffer> vst v:lua.get_spec_info(v:lua.upstream_spec_path())')
     end,
