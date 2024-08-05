@@ -149,6 +149,47 @@ end
 vim.opt.rtp:prepend(lazypath)
 -- then, setup!
 require("lazy").setup({
+    -- nice bar at the bottom
+	{
+		'itchyny/lightline.vim',
+		lazy = false, -- also load at start since it's UI
+		config = function()
+			-- no need to also show mode in cmd line when we have bar
+			vim.o.showmode = false
+			vim.g.lightline = {
+				active = {
+					left = {
+						{ 'mode', 'paste' },
+						{ 'readonly', 'filename', 'modified' }
+					},
+					right = {
+						{ 'lineinfo' },
+						{ 'percent' },
+						{ 'fileencoding', 'filetype' }
+					},
+				},
+				component_function = {
+					filename = 'LightlineFilename'
+				},
+			}
+			function LightlineFilenameInLua(opts)
+				if vim.fn.expand('%:t') == '' then
+					return '[No Name]'
+				else
+					return vim.fn.getreg('%')
+				end
+			end
+			-- https://github.com/itchyny/lightline.vim/issues/657
+			vim.api.nvim_exec(
+				[[
+				function! g:LightlineFilename()
+					return v:lua.LightlineFilenameInLua()
+				endfunction
+				]],
+				true
+			)
+		end
+	},
     -- quick navigation
 	{
 		'ggandor/leap.nvim',
@@ -156,7 +197,53 @@ require("lazy").setup({
 			require('leap').create_default_mappings()
 		end
 	},
+    -- better %
+	{
+		'andymass/vim-matchup',
+		config = function()
+			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+		end
+	},
+	-- auto-cd to root of git project
+	-- 'airblade/vim-rooter'
+	{
+		'notjedi/nvim-rooter.lua',
+		config = function()
+			require('nvim-rooter').setup()
+		end
+	},
+	-- fzf support for ^p
+	{
+		'junegunn/fzf.vim',
+		dependencies = {
+			{ 'junegunn/fzf', dir = '~/.fzf', build = './install --all' },
+		},
+		config = function()
+			-- stop putting a giant window over my editor
+			vim.g.fzf_layout = { down = '~20%' }
+			-- when using :Files, pass the file list through
+			--
+			--   https://github.com/jonhoo/proximity-sort
+			--
+			-- to prefer files closer to the current file.
+			function list_cmd()
+				local base = vim.fn.fnamemodify(vim.fn.expand('%'), ':h:.:S')
+				if base == '.' then
+					-- if there is no current file,
+					-- proximity-sort can't do its thing
+					return 'fd --type file --follow'
+				else
+					return vim.fn.printf('fd --type file --follow | proximity-sort %s', vim.fn.shellescape(vim.fn.expand('%')))
+				end
+			end
+			vim.api.nvim_create_user_command('Files', function(arg)
+				vim.fn['fzf#vim#files'](arg.qargs, { source = list_cmd(), options = '--tiebreak=index' }, arg.bang)
+			end, { bang = true, nargs = '?', complete = "dir" })
+		end,
+	},
 })
+
+vim.keymap.set('n', '<C-p>', '<cmd>Files<cr>')
 
 -------------------------------------------------------------------------------
 --
