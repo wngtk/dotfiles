@@ -16,6 +16,7 @@ set -x EDITOR nvim
 
 fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
 fish_add_path -gp "$HOME/.dotfiles_local/bin"
+fish_add_path -ga "$HOME/.neovim/node/bin"
 
 if status --is-interactive
 	set fish_greeting

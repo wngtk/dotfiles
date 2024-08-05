@@ -30,6 +30,35 @@ if [[ ! -f $HOME/.fzf/bin/fzf ]]; then
 fi
 
 #######################
+# NEOVIM
+#######################
+
+NVIM=$HOME/.neovim
+mkdir -p $NVIM
+
+# Create Python3 environment
+if [[ ! -d $NVIM/py3 ]]; then
+    python3 -m venv $NVIM/py3
+    PIP=$NVIM/py3/bin/pip
+    $PIP install --upgrade pip
+    $PIP install neovim
+    $PIP install 'python-language-server[all]'
+    $PIP install pylint isort jedi flake8
+    $PIP install black yapf
+fi
+
+# Create node env
+if [[ ! -d $NVIM/node/bin ]]; then
+    NODE_SCRIPT=/tmp/install-node.sh
+    curl -sL https://install-node.now.sh/lts -o $NODE_SCRIPT
+    chmod +x $NODE_SCRIPT
+    mkdir -p $NVIM/node
+    PREFIX=$NVIM/node $NODE_SCRIPT -y
+    PATH="$NVIM/node/bin:$PATH"
+    npm install -g neovim
+fi
+
+#######################
 # RUST
 #######################
 

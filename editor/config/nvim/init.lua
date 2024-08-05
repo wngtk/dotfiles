@@ -1,3 +1,6 @@
+vim.g.node_host_prog = '~/.neovim/node/bin/neovim-node-host'
+vim.g.python3_host_prog = '~/.neovim/py3/bin/python'
+
 -- always set leader first!
 vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
 vim.g.mapleader = " "
