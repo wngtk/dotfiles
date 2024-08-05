@@ -1,13 +1,7 @@
 -- always set leader first!
 vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
 vim.g.mapleader = " "
--- Add this to your init.lua
-vim.cmd [[
-augroup javascript_autocmd
-    autocmd!
-    autocmd FileType javascript inoremap ==<Space> ===<Space>
-augroup END
-]]
+
 -------------------------------------------------------------------------------
 --
 -- preferences
@@ -67,19 +61,33 @@ vim.opt.listchars = 'tab:^ ,nbsp:¬,extends:»,precedes:«,trail:•'
 -- hotkeys
 --
 -------------------------------------------------------------------------------
-
 -- Edit my Vimrc file
 vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<cr>')
--- quick-open
+-- quick-open, <cmd> is the same as :
 vim.keymap.set('n', '<C-p>', '<cmd>Files<cr>')
+-- e g H -- FZF
+-- vim.keymap.set('n', '<leader>e', '<cmd>Files<cr>')
+vim.keymap.set('n', '<leader>g', '<cmd>Rg<cr>')
+vim.keymap.set('n', '<leader>H', '<cmd>History<cr>')
+-- numbers
+vim.keymap.set('n', '<leader>1', '1gt<CR>')
+vim.keymap.set('n', '<leader>2', '2gt<CR>')
+vim.keymap.set('n', '<leader>3', '3gt<CR>')
+vim.keymap.set('n', '<leader>4', '4gt<CR>')
+vim.keymap.set('n', '<leader>5', '5gt<CR>')
+vim.keymap.set('n', '<leader>6', '6gt<CR>')
+vim.keymap.set('n', '<leader>7', '7gt<CR>')
+vim.keymap.set('n', '<leader>8', '8gt<CR>')
+vim.keymap.set('n', '<leader>9', '9gt<CR>')
+vim.keymap.set('n', '<leader>n', ':tabnew<CR>')
+vim.keymap.set('n', '<leader>x', ':tabclose<CR>')
 -- search buffers
 vim.keymap.set('n', '<leader>;', '<cmd>Buffers<cr>')
 -- quick-save
 vim.keymap.set('n', '<leader>w', '<cmd>w<cr>')
--- quick-exit
 vim.keymap.set('n', '<leader>q', '<cmd>q<cr>')
--- quick-save-exit
 vim.keymap.set('n', '<leader>wq', '<cmd>wq<cr>')
+vim.keymap.set('n', '<leader>Q', '<cmd>q!<cr>')
 -- Ctrl+h to stop searching
 vim.keymap.set('v', '<C-h>', '<cmd>nohlsearch<cr>')
 vim.keymap.set('n', '<C-h>', '<cmd>nohlsearch<cr>')
@@ -124,14 +132,18 @@ vim.keymap.set('i', '<F1>', '<Esc>')
 -- autocommands
 --
 -------------------------------------------------------------------------------
+-- make == to ===
+vim.cmd [[
+augroup javascript_autocmd
+    autocmd!
+    autocmd FileType javascript inoremap ==<Space> ===<Space>
+augroup END
+]]
 -- highlight yanked text
-vim.api.nvim_create_autocmd(
-	'TextYankPost',
-	{
-		pattern = '*',
-		command = 'silent! lua vim.highlight.on_yank({ timeout = 500 })'
-	}
-)
+vim.api.nvim_create_autocmd('TextYankPost', {
+    pattern = '*',
+    command = 'silent! lua vim.highlight.on_yank({ timeout = 500 })'
+})
 -- jump to last edit position on opening file
 vim.api.nvim_create_autocmd(
 	'BufReadPost',
@@ -150,6 +162,7 @@ vim.api.nvim_create_autocmd(
 )
 -- prevent accidental writes to buffers that shouldn't be edited
 vim.api.nvim_create_autocmd('BufRead', { pattern = '*.orig', command = 'set readonly' })
+vim.api.nvim_create_autocmd('BufRead', { pattern = '*.bk', command = 'set readonly' })
 vim.api.nvim_create_autocmd('BufRead', { pattern = '*.pacnew', command = 'set readonly' })
 -- leave paste mode when leaving insert mode (if it was on)
 vim.api.nvim_create_autocmd('InsertLeave', { pattern = '*', command = 'set nopaste' })
@@ -320,6 +333,106 @@ require("lazy").setup({
 				vim.fn['fzf#vim#files'](arg.qargs, { source = list_cmd(), options = '--tiebreak=index' }, arg.bang)
 			end, { bang = true, nargs = '?', complete = "dir" })
 		end,
+	},
+    -- LSP
+	{
+		'neovim/nvim-lspconfig',
+		config = function()
+			-- Setup language servers.
+			local lspconfig = require('lspconfig')
+
+			-- Rust
+			lspconfig.rust_analyzer.setup {
+				-- Server-specific settings. See `:help lspconfig-setup`
+				settings = {
+					["rust-analyzer"] = {
+						cargo = {
+							allFeatures = true,
+						},
+						imports = {
+							group = {
+								enable = false,
+							},
+						},
+						completion = {
+							postfix = {
+								enable = false,
+							},
+						},
+					},
+				},
+			}
+
+			-- Bash LSP
+			local configs = require 'lspconfig.configs'
+			if not configs.bash_lsp and vim.fn.executable('bash-language-server') == 1 then
+				configs.bash_lsp = {
+					default_config = {
+						cmd = { 'bash-language-server', 'start' },
+						filetypes = { 'sh' },
+						root_dir = require('lspconfig').util.find_git_ancestor,
+						init_options = {
+							settings = {
+								args = {}
+							}
+						}
+					}
+				}
+			end
+			if configs.bash_lsp then
+				lspconfig.bash_lsp.setup {}
+			end
+
+			-- Global mappings.
+			-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+			vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+			vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+			vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+			-- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+
+			-- Use LspAttach autocommand to only map the following keys
+			-- after the language server attaches to the current buffer
+			vim.api.nvim_create_autocmd('LspAttach', {
+				group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+				callback = function(ev)
+					-- Enable completion triggered by <c-x><c-o>
+					vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+					-- Buffer local mappings.
+					-- See `:help vim.lsp.*` for documentation on any of the below functions
+					local opts = { buffer = ev.buf }
+					vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+					vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+					vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+					vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+					vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+					vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
+					vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
+					vim.keymap.set('n', '<leader>wl', function()
+						print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+					end, opts)
+					--vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+					vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
+					vim.keymap.set({ 'n', 'v' }, '<leader>a', vim.lsp.buf.code_action, opts)
+					vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+					vim.keymap.set('n', '<leader>f', function()
+						vim.lsp.buf.format { async = true }
+					end, opts)
+
+					local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+					-- When https://neovim.io/doc/user/lsp.html#lsp-inlay_hint stabilizes
+					-- *and* there's some way to make it only apply to the current line.
+					-- if client.server_capabilities.inlayHintProvider then
+					--     vim.lsp.inlay_hint(ev.buf, true)
+					-- end
+
+					-- None of this semantics tokens business.
+					-- https://www.reddit.com/r/neovim/comments/143efmd/is_it_possible_to_disable_treesitter_completely/
+					client.server_capabilities.semanticTokensProvider = nil
+				end,
+			})
+		end
 	},
 })
 
