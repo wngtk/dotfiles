@@ -91,6 +91,8 @@ vim.keymap.set('n', '<leader>w', '<cmd>w<cr>')
 vim.keymap.set('n', '<leader>q', '<cmd>q<cr>')
 vim.keymap.set('n', '<leader>wq', '<cmd>wq<cr>')
 vim.keymap.set('n', '<leader>Q', '<cmd>q!<cr>')
+-- make missing : less annoying
+vim.keymap.set('n', ';', ':')
 -- Ctrl+h to stop searching
 vim.keymap.set('v', '<C-h>', '<cmd>nohlsearch<cr>')
 vim.keymap.set('n', '<C-h>', '<cmd>nohlsearch<cr>')
