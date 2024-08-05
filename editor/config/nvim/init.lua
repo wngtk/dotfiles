@@ -1,7 +1,6 @@
-local g = vim.g
-local o = vim.o
-local opt = vim.opt
-
+-- always set leader first!
+vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
+vim.g.mapleader = " "
 -- Add this to your init.lua
 vim.cmd [[
 augroup javascript_autocmd
@@ -9,21 +8,6 @@ augroup javascript_autocmd
     autocmd FileType javascript inoremap ==<Space> ===<Space>
 augroup END
 ]]
-
-
--- Better editor UI
--- o.termguicolors = true
-o.number = true
-o.relativenumber = true
-o.cursorline = true
-
--- Better editing experience
--- tabs: go big or go home
-o.expandtab = true
-o.tabstop = 4
-o.softtabstop = 4
-o.shiftwidth = 4
-
 -------------------------------------------------------------------------------
 --
 -- preferences
@@ -78,30 +62,37 @@ vim.opt.diffopt:append('indent-heuristic')
 -- also, show tabs nicer
 vim.opt.listchars = 'tab:^ ,nbsp:¬,extends:»,precedes:«,trail:•'
 
+-------------------------------------------------------------------------------
+--
+-- hotkeys
+--
+-------------------------------------------------------------------------------
 
-o.splitright = true
-o.splitbelow = true
-
-g.mapleader = " "
-g.localmapleader = " "
-
--------------------------------------------------
--- KEYBINDINGS
--------------------------------------------------
-
-local function map(m, k, v)
-        vim.keymap.set(m, k, v, { silent = true })
-end
-
-map("n", "<leader>q", ":q<cr>")
-map("n", "<leader>w", ":w<cr>")
-map("n", "<leader>wq", ":wq<cr>")
-map("n", "<C-h>", "<cmd>nohlsearch<cr>")
-map("v", "<C-h>", "<cmd>nohlsearch<cr>")
-
+-- Edit my Vimrc file
+vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<cr>')
+-- quick-open
+vim.keymap.set('n', '<C-p>', '<cmd>Files<cr>')
+-- search buffers
+vim.keymap.set('n', '<leader>;', '<cmd>Buffers<cr>')
+-- quick-save
+vim.keymap.set('n', '<leader>w', '<cmd>w<cr>')
+-- quick-exit
+vim.keymap.set('n', '<leader>q', '<cmd>q<cr>')
+-- quick-save-exit
+vim.keymap.set('n', '<leader>wq', '<cmd>wq<cr>')
+-- Ctrl+h to stop searching
+vim.keymap.set('v', '<C-h>', '<cmd>nohlsearch<cr>')
+vim.keymap.set('n', '<C-h>', '<cmd>nohlsearch<cr>')
 -- Jump to start and end of line using the home row keys
 vim.keymap.set('', 'H', '^')
 vim.keymap.set('', 'L', '$')
+-- Neat X clipboard integration
+-- <leader>p will paste clipboard into buffer
+-- <leader>c will copy entire buffer into clipboard
+vim.keymap.set('n', '<leader>p', '<cmd>read !wl-paste<cr>')
+vim.keymap.set('n', '<leader>c', '<cmd>w !wl-copy<cr><cr>')
+-- <leader><leader> toggles between buffers
+vim.keymap.set('n', '<leader><leader>', '<c-^>')
 -- <leader>, shows/hides hidden characters
 vim.keymap.set('n', '<leader>,', ':set invlist<cr>')
 -- always center search results
@@ -130,6 +121,73 @@ vim.keymap.set('i', '<F1>', '<Esc>')
 
 -------------------------------------------------------------------------------
 --
+-- autocommands
+--
+-------------------------------------------------------------------------------
+-- highlight yanked text
+vim.api.nvim_create_autocmd(
+	'TextYankPost',
+	{
+		pattern = '*',
+		command = 'silent! lua vim.highlight.on_yank({ timeout = 500 })'
+	}
+)
+-- jump to last edit position on opening file
+vim.api.nvim_create_autocmd(
+	'BufReadPost',
+	{
+		pattern = '*',
+		callback = function(ev)
+			if vim.fn.line("'\"") > 1 and vim.fn.line("'\"") <= vim.fn.line("$") then
+				-- except for in git commit messages
+				-- https://stackoverflow.com/questions/31449496/vim-ignore-specifc-file-in-autocommand
+				if not vim.fn.expand('%:p'):find('.git', 1, true) then
+					vim.cmd('exe "normal! g\'\\""')
+				end
+			end
+		end
+	}
+)
+-- prevent accidental writes to buffers that shouldn't be edited
+vim.api.nvim_create_autocmd('BufRead', { pattern = '*.orig', command = 'set readonly' })
+vim.api.nvim_create_autocmd('BufRead', { pattern = '*.pacnew', command = 'set readonly' })
+-- leave paste mode when leaving insert mode (if it was on)
+vim.api.nvim_create_autocmd('InsertLeave', { pattern = '*', command = 'set nopaste' })
+-- help filetype detection (add as needed)
+--vim.api.nvim_create_autocmd('BufRead', { pattern = '*.ext', command = 'set filetype=someft' })
+-- correctly classify mutt buffers
+local email = vim.api.nvim_create_augroup('email', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+	pattern = '/tmp/mutt*',
+	group = email,
+	command = 'setfiletype mail',
+})
+-- also, produce "flowed text" wrapping
+-- https://brianbuccola.com/line-breaks-in-mutt-and-vim/
+vim.api.nvim_create_autocmd('Filetype', {
+  pattern = 'mail',
+  group = email,
+  command = 'setlocal formatoptions+=w',
+})
+-- shorter columns in text because it reads better that way
+local text = vim.api.nvim_create_augroup('text', { clear = true })
+for _, pat in ipairs({'text', 'markdown', 'mail', 'gitcommit'}) do
+	vim.api.nvim_create_autocmd('Filetype', {
+		pattern = pat,
+		group = text,
+		command = 'setlocal spell tw=72 colorcolumn=73',
+	})
+end
+--- tex has so much syntax that a little wider is ok
+vim.api.nvim_create_autocmd('Filetype', {
+	pattern = 'tex',
+	group = text,
+	command = 'setlocal spell tw=80 colorcolumn=81',
+})
+-- TODO: no autocomplete in text
+
+-------------------------------------------------------------------------------
+--
 -- plugin configuration
 --
 -------------------------------------------------------------------------------
@@ -149,6 +207,28 @@ end
 vim.opt.rtp:prepend(lazypath)
 -- then, setup!
 require("lazy").setup({
+    -- main color scheme
+	{
+		"wincent/base16-nvim",
+		lazy = false, -- load at start
+		priority = 1000, -- load first
+		config = function()
+			vim.cmd([[colorscheme base16-gruvbox-dark-hard]])
+			vim.o.background = 'dark'
+			-- XXX: hi Normal ctermbg=NONE
+			-- Make comments more prominent -- they are important.
+			local bools = vim.api.nvim_get_hl(0, { name = 'Boolean' })
+			vim.api.nvim_set_hl(0, 'Comment', bools)
+			-- Make it clearly visible which argument we're at.
+			local marked = vim.api.nvim_get_hl(0, { name = 'PMenu' })
+			vim.api.nvim_set_hl(0, 'LspSignatureActiveParameter', { fg = marked.fg, bg = marked.bg, ctermfg = marked.ctermfg, ctermbg = marked.ctermbg, bold = true })
+			-- XXX
+			-- Would be nice to customize the highlighting of warnings and the like to make
+			-- them less glaring. But alas
+			-- https://github.com/nvim-lua/lsp_extensions.nvim/issues/21
+			-- call Base16hi("CocHintSign", g:base16_gui03, "", g:base16_cterm03, "", "", "")
+		end
+	},
     -- nice bar at the bottom
 	{
 		'itchyny/lightline.vim',
@@ -243,7 +323,6 @@ require("lazy").setup({
 	},
 })
 
-vim.keymap.set('n', '<C-p>', '<cmd>Files<cr>')
 
 -------------------------------------------------------------------------------
 --
