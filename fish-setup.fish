@@ -10,3 +10,7 @@ end
 
 nvm install lts
 set --universal nvm_default_version lts
+
+if not command -v pnpm > /dev/null
+    npm install -g pnpm
+end
