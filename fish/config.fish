@@ -9,14 +9,17 @@ if command -v eza > /dev/null
 	abbr -a ls 'eza'
 	abbr -a ll 'eza -l'
 	abbr -a lll 'eza -la'
+else
+    abbr -a l 'ls'
+    abbr -a ll 'ls -l'
+    abbr -a lll 'ls -la'
 end
 
 set -x MANPAGER "nvim +Man!"
 set -x EDITOR nvim
 
-fish_add_path -gp "$HOME/.dotfiles/bin" "$HOME/.local/bin"
-fish_add_path -gp "$HOME/.dotfiles_local/bin"
-fish_add_path -ga "$HOME/.neovim/node/bin"
+fish_add_path -p "$HOME/.dotfiles/bin" "$HOME/.local/bin"
+fish_add_path -p "$HOME/.dotfiles_local/bin"
 
 if status --is-interactive
 	set fish_greeting
