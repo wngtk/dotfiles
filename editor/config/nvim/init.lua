@@ -184,6 +184,16 @@ vim.api.nvim_create_autocmd('Filetype', {
     group = email,
     command = 'setlocal formatoptions+=w',
 })
+-- nvim as manpager
+local man = vim.api.nvim_create_augroup('ManFileType', { clear = true })
+vim.api.nvim_create_autocmd('Filetype', {
+    pattern = 'man',
+    group = man,
+    callback = function()
+        vim.api.nvim_buf_set_keymap(0, 'n', 'd', '<C-D>', { noremap = true, silent = true })
+        vim.api.nvim_buf_set_keymap(0, 'n', 'u', '<C-U>', { noremap = true, silent = true })
+    end
+})
 -- shorter columns in text because it reads better that way
 local text = vim.api.nvim_create_augroup('text', { clear = true })
 for _, pat in ipairs({'text', 'markdown', 'mail', 'gitcommit'}) do
