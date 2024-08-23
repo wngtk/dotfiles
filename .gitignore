@@ -1,2 +1,2 @@
-vim/pack/vendor/start
+vim/plugged
 editor/.config/nvim/lua/local-settings
