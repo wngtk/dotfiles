@@ -1,5 +1,46 @@
 set nocompatible    " VI compatible mode is disabled so that VIm things work
 
+" =============================================================================
+"   PLUGINS
+" =============================================================================
+call plug#begin()
+
+" Load plugins
+" Per file editor config
+Plug 'ciaranm/securemodelines'
+Plug 'editorconfig/editorconfig-vim'
+
+" Movement
+Plug 'justinmk/vim-sneak'
+Plug 'easymotion/vim-easymotion'
+Plug 'haya14busa/incsearch-easymotion.vim'
+Plug 'wikitopian/hardmode'            " Disable arrow keys and similar
+
+" Text Manipulation
+Plug 'tpope/vim-sensible'             " Some better defaults
+Plug 'tpope/vim-unimpaired'           " Pairs of mappings
+Plug 'tpope/vim-surround'             " Surround with parentheses & co
+Plug 'joom/vim-commentary'            " To comment stuff out
+Plug 'terryma/vim-multiple-cursors'   " Multiple cursors like sublime
+Plug 'godlygeek/tabular'              " For alignment
+Plug 'junegunn/vim-easy-align'        " Easier alignment
+Plug 'foosoft/vim-argwrap'            " convert lists of arguments into blocks of arguments
+" Interacts with coc Plug 'tpope/vim-endwise'              " Ends control flow indentifiers
+Plug 'tpope/vim-repeat'               " Adds repeat thorugh . to other packages
+Plug 'tpope/vim-speeddating'          " Dates in vim
+
+" GUI enhancements
+Plug 'itchyny/lightline.vim'          " Better Status Bar
+Plug 'mhinz/vim-startify'             " Better start screen
+Plug 'scrooloose/nerdtree'            " File explorer
+" Plug 'ryanoasis/vim-devicons'         " Nice filetype icons (slow)
+
+call plug#end()
+
+" =============================================================================
+"  EDITOR SETTINGS
+" =============================================================================
+
 " Spaces & Tabs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set tabstop=4       " number of visual spaces per TAB
@@ -199,6 +240,9 @@ nnoremap <Leader>8 8gt<CR>
 nnoremap <Leader>9 9gt<CR>
 nnoremap <Leader>n :tabnew<CR>
 nnoremap <Leader>x :tabclose<CR>
+
+" -- Miscellaneous toggles
+nnoremap <Leader>oe :NERDTreeToggle<CR>
 
 " =============================================================================
 " # Autocommands
