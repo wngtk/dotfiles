@@ -1,5 +1,5 @@
-vim.g.node_host_prog = '~/.neovim/node/bin/neovim-node-host'
-vim.g.python3_host_prog = '~/.neovim/py3/bin/python'
+-- vim.g.node_host_prog = '~/.neovim/node/bin/neovim-node-host'
+-- vim.g.python3_host_prog = '~/.neovim/py3/bin/python'
 
 -- always set leader first!
 vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
@@ -239,6 +239,7 @@ require("lazy").setup({
         priority = 1000, -- load first
         config = function()
             vim.cmd([[colorscheme base16-gruvbox-dark-hard]])
+            vim.cmd([[set termguicolors]])
             vim.o.background = 'dark'
             -- XXX: hi Normal ctermbg=NONE
             -- Make comments more prominent -- they are important.
