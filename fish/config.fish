@@ -1,4 +1,5 @@
 abbr -a e nvim
+abbr -a v vim
 abbr -a m make
 abbr -a g git
 abbr -a gs git status
