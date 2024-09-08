@@ -10,6 +10,11 @@ call plug#begin()
 Plug 'ciaranm/securemodelines'
 Plug 'editorconfig/editorconfig-vim'
 
+" Search
+Plug 'romainl/vim-cool'               " Disables highlight when search is done
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }  " FZF plugin, makes Ctrl-P unnecessary
+Plug 'junegunn/fzf.vim'
+
 " Movement
 Plug 'justinmk/vim-sneak'
 Plug 'easymotion/vim-easymotion'
@@ -34,6 +39,11 @@ Plug 'itchyny/lightline.vim'          " Better Status Bar
 Plug 'mhinz/vim-startify'             " Better start screen
 Plug 'scrooloose/nerdtree'            " File explorer
 " Plug 'ryanoasis/vim-devicons'         " Nice filetype icons (slow)
+
+" Tmux GUI
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'roxma/vim-tmux-clipboard'
+Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
@@ -189,16 +199,29 @@ nmap <Leader>f <Plug>(easymotion-overwin-f)
 map <Leader>s <Plug>(easymotion-f2)
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
 
-
 " CamelCaseMotion
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " handy keymap for replacing up to next _ (like in variable names)
 nmap <Leader>m c<Plug>CamelCaseMotion_e
 
+" Minor Configs
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" * FZF
+let g:fzf_layout = { 'down': '~20%' }
+
+" remote yanks OSC52
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankRegister +' | endif
+
 " =============================================================================
 "   CUSTOM SHORTCUTS  (LEADER, FN, &c)
 " =============================================================================
+
+" Modifiers
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <C-g> :Goyo<CR>
+map <C-p> :Files<CR>
+map <C-h> :History<CR>
 
 nmap <Left> :bp<CR>
 nmap <Right> :bn<CR>
@@ -221,6 +244,11 @@ nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
+
+"  e g H -- FZF
+nnoremap <Leader>g :Rg<CR>
+nnoremap <Leader>e :Files<CR>
+nnoremap <Leader>H :History<CR>
 
 " `  `v  `z  rv  -- edit vimrc/zshrc and load vimrc bindings
 " nnoremap <Leader>` :Startify<CR>
