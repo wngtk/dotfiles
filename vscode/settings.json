@@ -14,11 +14,13 @@
     "vim.enableNeovim": true,
     "vim.vimrc.enable": true,
     "remote.extensionKind": {
+        "asvetliakov.vscode-neovim": ["workspace"],
         "vscodevim.vim": [
             "workspace"
         ]
     },
     "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1,
         "vscodevim.vim": 1
     },
     "editor.fontFamily": "'SauceCodePro Nerd Font', Consolas, 'Courier New', monospace"
