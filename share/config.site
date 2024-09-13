@@ -1,0 +1,13 @@
+# https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.72/html_node/Site-Defaults.html
+#
+# debug config.site for configure
+
+test "$prefix" = NONE && prefix=$PWD/debug
+
+if test -z "$CPPFLAGS"; then
+    CPPFLAGS="-DDEBUG"
+fi
+
+if test -z "$CFLAGS"; then
+    CFLAGS="-g -O0"
+fi
