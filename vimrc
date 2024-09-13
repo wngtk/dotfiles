@@ -14,6 +14,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'justinmk/vim-sneak'
 Plug 'easymotion/vim-easymotion'
 Plug 'haya14busa/incsearch-easymotion.vim'
+Plug 'bkad/CamelCaseMotion'
 Plug 'wikitopian/hardmode'            " Disable arrow keys and similar
 
 " Text Manipulation
