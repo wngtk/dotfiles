@@ -55,8 +55,8 @@ vim.opt.rtp:prepend(lazypath)
 
 -- setup!
 require("lazy").setup({
-    spec = {
-        -- quick navigation
+	spec = {
+		-- quick navigation
 		{
 			'ggandor/leap.nvim', 
 			config = function()
@@ -64,15 +64,15 @@ require("lazy").setup({
 			end
 		},
 		-- handy keymap for replacing up to next _ (like in variable names)
-    	{
+		{
 			'bkad/CamelCaseMotion',
 			config = function()
 				vim.keymap.set('n', '<Leader>m', 'c<Plug>CamelCaseMotion_e')
 			end
 		}
-    },
+	},
 	-- Install plugin from command line
 	-- nvim -u ~/.dotfiles/vscode/init.lua +"lua require('lazy').install()" +qa
-    install = { missing = false },
+	install = { missing = false },
 	checker = { enabled = false },
 })
