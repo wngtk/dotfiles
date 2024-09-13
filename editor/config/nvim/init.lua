@@ -131,6 +131,10 @@ vim.keymap.set('n', '<leader>m', 'ct_')
 -- F1 is pretty close to Esc, so you probably meant Esc
 vim.keymap.set('', '<F1>', '<Esc>')
 vim.keymap.set('i', '<F1>', '<Esc>')
+-- - |	-- split with leader
+vim.keymap.set('n', '<leader>-', ':sp<cr>')
+vim.keymap.set('n', '<leader>|', ':vsp<cr>')
+vim.keymap.set('n', '<leader>bd', '<cmd>bd<cr>')
 
 -------------------------------------------------------------------------------
 --
