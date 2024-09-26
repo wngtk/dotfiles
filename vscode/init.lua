@@ -28,16 +28,18 @@ vim.keymap.set('v', '<Leader>P', '"+P')
 -- Clear highlights on search when pressing <ES> in normal mode
 vim.keymap.set('n', '<Esc>', '<Cmd>nohlsearch<CR>')
 
-local vscode = require('vscode')
-vim.notify = vscode.notify
-vim.keymap.set('n', '<Leader>q', function()
-	vscode.call('workbench.action.closeActiveEditor')
-end)
-vim.keymap.set({ "n", "x", "i" }, "<C-d>", function()
-	vscode.with_insert(function()
-		vscode.action("editor.action.addSelectionToNextFindMatch")
+if vim.g.vscode then
+	local vscode = require('vscode')
+	vim.notify = vscode.notify
+	vim.keymap.set('n', '<Leader>q', function()
+		vscode.call('workbench.action.closeActiveEditor')
 	end)
-end)
+	vim.keymap.set({ "n", "x", "i" }, "<C-d>", function()
+		vscode.with_insert(function()
+			vscode.action("editor.action.addSelectionToNextFindMatch")
+		end)
+	end)
+end
 
 -- bootstrap lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
