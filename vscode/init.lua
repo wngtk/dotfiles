@@ -15,7 +15,6 @@ vim.keymap.set('n', 'H', '^')
 vim.keymap.set('n', 'L', '$')
 -- Quick save
 vim.keymap.set('n', '<Leader>w', '<Cmd>w<CR>')
-vim.keymap.set('n', '<Leader>q', '<Cmd>q<CR>')
 -- Quick copy paste into system clipboard
 vim.keymap.set('n', '<Leader>y', '"+y')
 vim.keymap.set('v', '<Leader>y', '"+y')
@@ -30,7 +29,7 @@ vim.keymap.set('n', '<Esc>', '<Cmd>nohlsearch<CR>')
 
 if vim.g.vscode then
 	local vscode = require('vscode')
-	vim.notify = vscode.notify
+ 	vim.notify = vscode.notify
 	vim.keymap.set('n', '<Leader>q', function()
 		vscode.call('workbench.action.closeActiveEditor')
 	end)
