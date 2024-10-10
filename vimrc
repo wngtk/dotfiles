@@ -61,31 +61,31 @@ Plug 'roxma/vim-tmux-clipboard'
 Plug 'christoomey/vim-tmux-navigator'
 
 " Syntactic language support
-Plug 'w0rp/ale'                        " Linting engine
-Plug 'maximbaz/lightline-ale'          " Lightline + Ale
-Plug 'plasticboy/vim-markdown'         " Markdown support
-Plug 'mzlogin/vim-markdown-toc'        " Markdown TOC builder
-Plug 'cespare/vim-toml'                " TOML support
-Plug 'stephpy/vim-yaml'                " YAML support
-Plug 'elzr/vim-json'                   " Better JSON support
-Plug 'rust-lang/rust.vim'              " Rust support
-Plug 'glench/vim-jinja2-syntax'        " Jinja2 support
-Plug 'lervag/vimtex'                   " Latex support
-Plug 'pearofducks/ansible-vim'         " Ansible support
-Plug 'mechatroner/rainbow_csv'         " CSV color coding
-Plug 'ap/vim-css-color'                " CSS colors
-Plug 'frazrepo/vim-rainbow'                " Rainbow parentheses
-Plug 'vim-pandoc/vim-pandoc'           " Pandoc support
-Plug 'vim-pandoc/vim-pandoc-syntax'    " Pandoc syntax
-Plug 'chrisbra/colorizer'              " Colorize color codes
-Plug 'vim-scripts/applescript.vim'
-Plug 'pprovost/vim-ps1'
+" Plug 'w0rp/ale'                        " Linting engine
+" Plug 'maximbaz/lightline-ale'          " Lightline + Ale
+" Plug 'plasticboy/vim-markdown'         " Markdown support
+" Plug 'mzlogin/vim-markdown-toc'        " Markdown TOC builder
+" Plug 'cespare/vim-toml'                " TOML support
+" Plug 'stephpy/vim-yaml'                " YAML support
+" Plug 'elzr/vim-json'                   " Better JSON support
+" Plug 'rust-lang/rust.vim'              " Rust support
+" Plug 'glench/vim-jinja2-syntax'        " Jinja2 support
+" Plug 'lervag/vimtex'                   " Latex support
+" Plug 'pearofducks/ansible-vim'         " Ansible support
+" Plug 'mechatroner/rainbow_csv'         " CSV color coding
+" Plug 'ap/vim-css-color'                " CSS colors
+" Plug 'frazrepo/vim-rainbow'                " Rainbow parentheses
+" Plug 'vim-pandoc/vim-pandoc'           " Pandoc support
+" Plug 'vim-pandoc/vim-pandoc-syntax'    " Pandoc syntax
+" Plug 'chrisbra/colorizer'              " Colorize color codes
+" Plug 'vim-scripts/applescript.vim'
+" Plug 'pprovost/vim-ps1'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 " Plug 'norcalli/nvim-colorizer.lua'     " Faster colorzier (only neovim,
 " reconsider)
 " Plug 'liuchengxu/vista.vim'
-Plug 'vim-python/python-syntax'
+" Plug 'vim-python/python-syntax'
 " Plug 'sentientmachine/pretty-vim-python'
 " Plug 'isobit/vim-caddyfile'
 
