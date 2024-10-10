@@ -1,2 +1,3 @@
 vim/plugged
 editor/.config/nvim/lua/local-settings
+nvim/lua/local
