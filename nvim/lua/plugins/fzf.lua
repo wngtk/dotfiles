@@ -6,6 +6,9 @@ return {
 			{ "junegunn/fzf", dir = "~/.fzf", build = "./install --all" },
 		},
 		config = function()
+			vim.keymap.set("n", "<C-p>", "<cmd>Files<cr>")
+			vim.keymap.set("n", "<Leader>g", "<cmd>Rg<cr>")
+			vim.keymap.set("n", "<Leader>H", "<cmd>History<cr>")
 			-- stop putting a giant window over my editor
 			vim.g.fzf_layout = { down = "~20%" }
 			-- when using :Files, pass the file list through
@@ -13,7 +16,7 @@ return {
 			--   https://github.com/jonhoo/proximity-sort
 			--
 			-- to prefer files closer to the current file.
-			function list_cmd()
+			local function list_cmd()
 				local base = vim.fn.fnamemodify(vim.fn.expand("%"), ":h:.:S")
 				if base == "." then
 					-- if there is no current file,

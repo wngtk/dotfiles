@@ -9,8 +9,6 @@ vim.g.mapleader = vim.keycode("<Space>")
 vim.g.mapleader = " "
 -- Edit my Vimrc file
 -- vim.keymap.set("n", "<leader>ev", ":e $MYVIMRC<cr>")
--- quick-open, <cmd> is the same as :
-vim.keymap.set("n", "<C-p>", "<cmd>Files<cr>")
 -- numbers
 vim.keymap.set("n", "<leader>1", "1gt<CR>")
 vim.keymap.set("n", "<leader>2", "2gt<CR>")
@@ -79,5 +77,10 @@ vim.keymap.set("n", "<leader>-", ":sp<cr>")
 vim.keymap.set("n", "<leader>|", ":vsp<cr>")
 vim.keymap.set("n", "<leader>bd", "<cmd>bd<cr>")
 vim.keymap.set("n", "<leader>S", ":set spell!<CR>", { silent = true })
+-- Navigate vim panes better
+vim.keymap.set("n", "<c-k>", ":wincmd k<cr>")
+vim.keymap.set("n", "<c-j>", ":wincmd j<cr>")
+vim.keymap.set("n", "<c-h>", ":wincmd h<cr>")
+vim.keymap.set("n", "<c-l>", ":wincmd l<cr>")
 -- Lazy
 vim.keymap.set("n", "<leader>l", ":Lazy<CR>", { silent = true })
