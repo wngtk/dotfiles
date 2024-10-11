@@ -116,12 +116,20 @@ Plug 'sainnhe/sonokai'                 " Monokai Pro-like scheme
 
 call plug#end()
 
-set termguicolors
-colorscheme sonokai
-
 " =============================================================================
 "  EDITOR SETTINGS
 " =============================================================================
+
+" Colorscheme
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if exists("+termguicolors")
+    set termguicolors
+    " The commands below are needed for tmux + termguicolors
+    " This is only necessary if you use "set termguicolors".
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    silent! colorscheme sonokai
+endif
 
 " Spaces & Tabs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
