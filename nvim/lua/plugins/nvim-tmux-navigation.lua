@@ -1,10 +1,14 @@
 return {
-    "alexghergh/nvim-tmux-navigation",
-    config = function()
-        require("nvim-tmux-navigation").setup({})
-        vim.keymap.set("n", "<C-h>", "<Cmd>NvimTmuxNavigateLeft<CR>", {})
-        vim.keymap.set("n", "<C-j>", "<Cmd>NvimTmuxNavigateDown<CR>", {})
-        vim.keymap.set("n", "<C-k>", "<Cmd>NvimTmuxNavigateUp<CR>", {})
-        vim.keymap.set("n", "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>", {})
-    end,
+    {
+        "alexghergh/nvim-tmux-navigation",
+        keys = {
+            { "<C-h>", "<Cmd>NvimTmuxNavigateLeft<CR>" },
+            { "<C-j>", "<Cmd>NvimTmuxNavigateDown<CR>" },
+            { "<C-k>", "<Cmd>NvimTmuxNavigateUp<CR>" },
+            { "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>" },
+        },
+        opts = {
+            disable_when_zoomed = true,
+        },
+    },
 }
