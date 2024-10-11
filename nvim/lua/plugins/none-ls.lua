@@ -1,6 +1,14 @@
 return {
     {
         "nvimtools/none-ls.nvim",
+        keys = {
+            {
+                "<leader>f",
+                function()
+                    vim.lsp.buf.format({ async = true })
+                end,
+            },
+        },
         config = function()
             local null_ls = require("null-ls")
 
