@@ -43,7 +43,7 @@ vim.opt.scrolloff = 2
 -- never show me line breaks if they're not there
 vim.opt.wrap = false
 -- always draw sign column. prevents buffer moving when adding/deleting sign
-vim.opt.signcolumn = "yes"
+-- vim.opt.signcolumn = "yes"
 -- sweet sweet relative line numbers
 vim.opt.relativenumber = true
 -- and show the absolute line number for the current line
