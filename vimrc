@@ -19,8 +19,6 @@ Plug 'junegunn/fzf.vim'
 
 " Movement
 Plug 'justinmk/vim-sneak'
-Plug 'easymotion/vim-easymotion'
-Plug 'haya14busa/incsearch-easymotion.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'wikitopian/hardmode'            " Disable arrow keys and similar
 Plug 'farmergreg/vim-lastplace'
@@ -45,7 +43,6 @@ Plug 'mhinz/vim-startify'             " Better start screen
 " Plug 'simnalamburt/vim-mundo'         " Gundo fork
 " Plug 'preservim/tagbar'               " Pane with tags
 Plug 'machakann/vim-highlightedyank'  " Highlight yanks
-Plug 'ojroques/vim-oscyank'           " Yank from remote sessions
 Plug 'andymass/vim-matchup'           " Highlight corresponding blocks e.g. if - fi in bash
 Plug 'kshenoy/vim-signature'          " Show marks in the gutter
 " Plug 'yggdroot/indentline'            " Shows indentation levels
@@ -198,27 +195,6 @@ let g:sneak#use_ic_scs = 1
 highlight link Sneak None
 " Needed if a plugin sets the colorscheme dynamically:
 autocmd User SneakLeave highlight clear Sneak
-
-" Easymotion
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:EasyMotion_smartcase = 1
-
-" hjkl  s j k t / ? g/   -- EasyMotion
-map <Leader>h <Plug>(easymotion-linebackward)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map <Leader>l <Plug>(easymotion-lineforward)
-map <Leader>/ <Plug>(easymotion-sn)
-
-" Actually enhance f and sneak s
-" <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-
-" vim-sneak behaviour through easymotio
-map <Leader>s <Plug>(easymotion-f2)
-nmap <Leader>s <Plug>(easymotion-overwin-f2)
-
 
 " CamelCaseMotion
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
