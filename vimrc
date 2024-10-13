@@ -226,7 +226,7 @@ nmap <Leader>w :w<CR>
 nmap <Leader>q :q<CR>
 nmap <Leader>wq :wq<CR>
 nmap <Leader>Q :q!<CR>
-nnoremap <C-s> <cmd>w<CR>
+nnoremap <C-s> :w<CR>
 
 " use clipboard in WSL2 need `vim-gtk3`
 " sudo apt install -y vim-gtk3
@@ -243,7 +243,7 @@ vmap <Leader>P "+P
 "  <C-p> -- FZF
 let g:fzf_layout = { 'down': '~20%' }
 " nnoremap <Leader>g :Rg<CR>
-nnoremap <C-p> <cmd>Files<CR>
+nnoremap <C-p> :Files<CR>
 " nnoremap <Leader>H :History<CR>
 
 " `  `v  `z  rv  -- edit vimrc/zshrc and load vimrc bindings
