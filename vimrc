@@ -239,9 +239,29 @@ nmap <Leader>m c<Plug>CamelCaseMotion_e
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 " nmap ga <Plug>(EasyAlign)
 
-" remote yanks OSC52
-autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankRegister +' | endif
-autocmd TextYankPost * if v:event.operator is 'd' && v:event.regname is '+' | execute 'OSCYankRegister +' | endif
+if exists('$SSH_TTY')
+    set clipboard=
+else
+    set clipboard=unnamedplus
+endif
+
+if (!has('nvim') && !has('clipboard_working'))
+    " In the event that the clipboard isn't working, it's quite likely that
+    " the + and * registers will not be distinct from the unnamed register. In
+    " this case, a:event.regname will always be '' (empty string). However, it
+    " can be the case that `has('clipboard_working')` is false, yet `+` is
+    " still distinct, so we want to check them all.
+    let s:VimOSCYankPostRegisters = ['', '+', '*']
+    function! s:VimOSCYankPostCallback(event)
+        if a:event.operator == 'y' && index(s:VimOSCYankPostRegisters, a:event.regname) != -1
+            call OSCYankRegister(a:event.regname)
+        endif
+    endfunction
+    augroup VimOSCYankPost
+        autocmd!
+        autocmd TextYankPost * call s:VimOSCYankPostCallback(v:event)
+    augroup END
+endif
 
 " =============================================================================
 "   CUSTOM SHORTCUTS  (LEADER, FN, &c)
@@ -263,14 +283,14 @@ nnoremap <C-s> <cmd>w<CR>
 " use clipboard in WSL2 need `vim-gtk3`
 " sudo apt install -y vim-gtk3
 "  y d p P   --  Quick copy paste into system clipboard
-nmap <Leader>y "+y
-nmap <Leader>d "+d
-vmap <Leader>y "+y
-vmap <Leader>d "+d
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
+" nmap <Leader>y "+y
+" nmap <Leader>d "+d
+" vmap <Leader>y "+y
+" vmap <Leader>d "+d
+" nmap <Leader>p "+p
+" nmap <Leader>P "+P
+" vmap <Leader>p "+p
+" vmap <Leader>P "+P
 
 "  <C-p> -- FZF
 let g:fzf_layout = { 'down': '~20%' }
