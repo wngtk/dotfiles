@@ -85,3 +85,4 @@ vim.keymap.set("n", "<leader>S", ":set spell!<CR>", { silent = true })
 -- vim.keymap.set("n", "<c-l>", ":wincmd l<cr>")
 -- Lazy
 vim.keymap.set("n", "<leader>l", ":Lazy<CR>", { silent = true })
+vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
