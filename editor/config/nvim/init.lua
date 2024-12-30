@@ -7,7 +7,6 @@ vim.g.mapleader = " "
 -- preferences
 --
 -------------------------------------------------------------------------------
-vim.opt.inccommand = 'split'
 -- never ever folding
 vim.opt.foldenable = false
 vim.opt.foldmethod = 'manual'
@@ -35,7 +34,7 @@ vim.opt.wildmode = 'list:longest'
 -- when opening a file with a command (like :e),
 -- don't suggest files like there:
 vim.opt.wildignore = '.hg,.svn,*~,*.png,*.jpg,*.gif,*.min.js,*.swp,*.o,vendor,dist,_site'
--- tabs: go big or go home
+-- tabs: i like 4 spaces
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.tabstop = 4
@@ -53,6 +52,10 @@ vim.opt.diffopt:append('iwhite')
 --- https://luppeng.wordpress.com/2020/10/10/when-to-use-each-of-the-git-diff-algorithms/
 vim.opt.diffopt:append('algorithm:histogram')
 vim.opt.diffopt:append('indent-heuristic')
+-- show a column at 80 characters as a guide for long lines
+vim.opt.colorcolumn = '80'
+--- except in Rust where the rule is 100 characters
+vim.api.nvim_create_autocmd('Filetype', { pattern = 'rust', command = 'set colorcolumn=100' })
 -- show more hidden characters
 -- also, show tabs nicer
 vim.opt.listchars = 'tab:^ ,nbsp:¬,extends:»,precedes:«,trail:•'
@@ -62,8 +65,6 @@ vim.opt.listchars = 'tab:^ ,nbsp:¬,extends:»,precedes:«,trail:•'
 -- hotkeys
 --
 -------------------------------------------------------------------------------
--- Edit my Vimrc file
-vim.keymap.set('n', '<leader>ev', ':e $MYVIMRC<cr>')
 -- quick-open, <cmd> is the same as :
 vim.keymap.set('n', '<C-p>', '<cmd>Files<cr>')
 -- e g H -- FZF
@@ -97,11 +98,15 @@ vim.keymap.set('n', '<C-h>', '<cmd>nohlsearch<cr>')
 -- Jump to start and end of line using the home row keys
 vim.keymap.set('', 'H', '^')
 vim.keymap.set('', 'L', '$')
--- Neat X clipboard integration
--- <leader>p will paste clipboard into buffer
--- <leader>c will copy entire buffer into clipboard
-vim.keymap.set('n', '<leader>p', '<cmd>read !wl-paste<cr>')
-vim.keymap.set('n', '<leader>c', '<cmd>w !wl-copy<cr><cr>')
+-- y d p P Quick copy paste into system clipboard
+vim.keymap.set("n", "<leader>y", '"+y')
+vim.keymap.set("v", "<leader>y", '"+y')
+vim.keymap.set("n", "<leader>d", '"+d')
+vim.keymap.set("v", "<leader>d", '"+d')
+vim.keymap.set("n", "<leader>p", '"+p')
+vim.keymap.set("v", "<leader>p", '"+p')
+vim.keymap.set("n", "<leader>P", '"+P')
+vim.keymap.set("v", "<leader>P", '"+P')
 -- <leader><leader> toggles between buffers
 vim.keymap.set('n', '<leader><leader>', '<c-^>')
 -- <leader>, shows/hides hidden characters
@@ -289,12 +294,12 @@ require("lazy").setup({
             end
             -- https://github.com/itchyny/lightline.vim/issues/657
             vim.api.nvim_exec(
-            [[
-            function! g:LightlineFilename()
-            return v:lua.LightlineFilenameInLua()
-            endfunction
-            ]],
-            true
+                [[
+                function! g:LightlineFilename()
+                    return v:lua.LightlineFilenameInLua()
+                endfunction
+                ]],
+                true
             )
         end
     },
@@ -347,123 +352,76 @@ require("lazy").setup({
             vim.api.nvim_create_user_command('Files', function(arg)
                 vim.fn['fzf#vim#files'](arg.qargs, { source = list_cmd(), options = '--tiebreak=index' }, arg.bang)
             end, { bang = true, nargs = '?', complete = "dir" })
-        end,
+		end
     },
     -- LSP
-    {
-        'neovim/nvim-lspconfig',
-        config = function()
-            -- Setup language servers.
-            local lspconfig = require('lspconfig')
-
-            -- Rust
-            lspconfig.rust_analyzer.setup {
-                -- Server-specific settings. See `:help lspconfig-setup`
-                settings = {
-                    ["rust-analyzer"] = {
-                        cargo = {
-                            allFeatures = true,
-                        },
-                        imports = {
-                            group = {
-                                enable = false,
-                            },
-                        },
-                        completion = {
-                            postfix = {
-                                enable = false,
-                            },
-                        },
-                    },
-                },
-            }
-
-            -- Bash LSP
-            local configs = require 'lspconfig.configs'
-            if not configs.bash_lsp and vim.fn.executable('bash-language-server') == 1 then
-                configs.bash_lsp = {
-                    default_config = {
-                        cmd = { 'bash-language-server', 'start' },
-                        filetypes = { 'sh' },
-                        root_dir = require('lspconfig').util.find_git_ancestor,
-                        init_options = {
-                            settings = {
-                                args = {}
-                            }
-                        }
-                    }
-                }
-            end
-            if configs.bash_lsp then
-                lspconfig.bash_lsp.setup {}
-            end
-
-            -- Global mappings.
-            -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-            vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-            vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-            vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-            -- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
-
-            -- Use LspAttach autocommand to only map the following keys
-            -- after the language server attaches to the current buffer
-            vim.api.nvim_create_autocmd('LspAttach', {
-                group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-                callback = function(ev)
-                    -- Enable completion triggered by <c-x><c-o>
-                    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-                    -- Buffer local mappings.
-                    -- See `:help vim.lsp.*` for documentation on any of the below functions
-                    local opts = { buffer = ev.buf }
-                    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-                    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-                    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-                    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-                    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-                    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
-                    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
-                    vim.keymap.set('n', '<leader>wl', function()
-                        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                    end, opts)
-                    --vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-                    vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
-                    vim.keymap.set({ 'n', 'v' }, '<leader>a', vim.lsp.buf.code_action, opts)
-                    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-                    vim.keymap.set('n', '<leader>f', function()
-                        vim.lsp.buf.format { async = true }
-                    end, opts)
-
-                    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-                    -- When https://neovim.io/doc/user/lsp.html#lsp-inlay_hint stabilizes
-                    -- *and* there's some way to make it only apply to the current line.
-                    -- if client.server_capabilities.inlayHintProvider then
-                    --     vim.lsp.inlay_hint(ev.buf, true)
-                    -- end
-
-                    -- None of this semantics tokens business.
-                    -- https://www.reddit.com/r/neovim/comments/143efmd/is_it_possible_to_disable_treesitter_completely/
-                    client.server_capabilities.semanticTokensProvider = nil
-                end,
-            })
-        end
-    },
+	-- LSP-based code-completion
+	-- inline function signatures
+	{
+		"ray-x/lsp_signature.nvim",
+		event = "VeryLazy",
+		opts = {},
+		config = function(_, opts)
+			-- Get signatures (and _only_ signatures) when in argument lists.
+			require "lsp_signature".setup({
+				doc_lines = 0,
+				handler_opts = {
+					border = "none"
+				},
+			})
+		end
+	},
+	-- language support
+	-- terraform
+	{
+		'hashivim/vim-terraform',
+		ft = { "terraform" },
+	},
+	-- svelte
+	{
+		'evanleck/vim-svelte',
+		ft = { "svelte" },
+	},
+	-- toml
+	'cespare/vim-toml',
+	-- yaml
+	{
+		"cuducos/yaml.nvim",
+		ft = { "yaml" },
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+		},
+	},
+	-- rust
+	{
+		'rust-lang/rust.vim',
+		ft = { "rust" },
+		config = function()
+			vim.g.rustfmt_autosave = 1
+			vim.g.rustfmt_emit_files = 1
+			vim.g.rustfmt_fail_silently = 0
+			vim.g.rust_clip_command = 'wl-copy'
+		end
+	},
+	-- fish
+	'khaveesh/vim-fish-syntax',
+	-- markdown
+	{
+		'plasticboy/vim-markdown',
+		ft = { "markdown" },
+		dependencies = {
+			'godlygeek/tabular',
+		},
+		config = function()
+			-- never ever fold!
+			vim.g.vim_markdown_folding_disabled = 1
+			-- support front-matter in .md files
+			vim.g.vim_markdown_frontmatter = 1
+			-- 'o' on a list item should insert at same level
+			vim.g.vim_markdown_new_list_item_indent = 0
+			-- don't add bullets when wrapping:
+			-- https://github.com/preservim/vim-markdown/issues/232
+			vim.g.vim_markdown_auto_insert_bullets = 0
+		end
+	},
 })
-
-
--------------------------------------------------------------------------------
---
--- local customizations
---
--------------------------------------------------------------------------------
--- local customizations in ~/.config/nvim/lua/local-settings/init.lua
--- https://neovim.io/doc/user/lua.html#_importing-lua-modules
-local function module_exists(name)
-    local status, _ = pcall(require, name)
-    return status
-end
-
-if module_exists("local-settings") then
-    require("local-settings")
-end
