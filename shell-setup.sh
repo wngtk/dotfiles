@@ -15,14 +15,6 @@ function pull_repo() {
     cd -
 }
 
-# AUTOJUMP
-if [[ ! -d $HOME/.autojump/ ]]; then
-    git clone https://github.com/wting/autojump.git /tmp/autojump
-    cd /tmp/autojump
-    ./install.py
-    cd -
-fi
-
 # FZF
 if [[ ! -f $HOME/.fzf/bin/fzf ]]; then
     git clone https://github.com/junegunn/fzf.git $HOME/.fzf
