@@ -11,8 +11,7 @@
     ~/.vscodevimrc:
     ~/.vim:
     ~/.vimrc:
-    # ~/.config/nvim: editor/config/nvim
-    ~/.config/nvim: lazyvim
+    ~/.config/nvim:
     ~/.config/fish/config.fish: fish/config.fish
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
