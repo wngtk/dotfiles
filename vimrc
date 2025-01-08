@@ -221,6 +221,9 @@ nmap <Leader>m c<Plug>CamelCaseMotion_e
 " nnoremap <Leader>ev :e $MYVIMRC<CR>
 " nnoremap <Leader>sv :source $MYVIMRC<CR>
 
+" make missing : less annoying
+nmap ; :
+
 "  w wq q   --  Quick Save
 nmap <Leader>w :w<CR>
 nmap <Leader>q :q<CR>
