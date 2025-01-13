@@ -354,6 +354,22 @@ require("lazy").setup({
             end, { bang = true, nargs = '?', complete = "dir" })
         end
     },
+    -- LSP
+    {
+        "neovim/nvim-lspconfig",
+        opts = {
+            servers = {
+                rust_analyzer = {}
+            }
+        },
+        config = function(_, opts)
+            local lspconfig = require("lspconfig")
+
+            for server, config in pairs(opts.servers) do
+                lspconfig[server].setup(config)
+            end
+        end
+    },
     -- language support
     -- terraform
     {
