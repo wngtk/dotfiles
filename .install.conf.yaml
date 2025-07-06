@@ -9,8 +9,6 @@
     ~/.dotfiles: ''
     ~/.tmux.conf:
     ~/.vscodevimrc:
-    ~/.vim:
-    ~/.vimrc:
     ~/.config/nvim:
     ~/.config/fish/config.fish: fish/config.fish
 - shell:
