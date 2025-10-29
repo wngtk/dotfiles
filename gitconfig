@@ -1,3 +1,7 @@
+[user]
+	name = Tony Wang
+	email = 100271394+wngtk@users.noreply.github.com
+
 [alias]
 	exec = ! "exec"
 	st = status -sb
@@ -65,7 +69,7 @@
 	compactionHeuristic = true
 
 [color]
-	ui = auto
+	ui = true
 
 [color "grep"]
 	match = cyan bold
@@ -82,7 +86,7 @@
 
 [merge]
 	defaultToUpstream = true
-	tool = vimdiff
+	tool = nvim -d
 
 [pull]
 	ff = only
@@ -102,9 +106,6 @@
 [advice]
 	detachedHead = false
 	waitingForEditor = false
-
-[user]
-	useConfigOnly = true
 
 [http]
 	cookieFile = ~/.gitcookies
