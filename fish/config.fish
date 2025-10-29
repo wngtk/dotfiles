@@ -24,6 +24,15 @@ fish_add_path -p "$HOME/.dotfiles_local/bin"
 
 if status --is-interactive
 	set fish_greeting
+    switch $TERM
+		case 'linux'
+			:
+		case '*'
+			if ! set -q TMUX
+				# ensure that the new tmux _also_ starts fish
+				exec tmux set-option -g default-shell (which fish) ';' new-session
+			end
+	end
     # Allow local customizations
     if test -e "$HOME/.config/fish/config_local_after.fish"
         builtin source "$HOME/.config/fish/config_local_after.fish"
