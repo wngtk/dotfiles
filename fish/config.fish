@@ -28,7 +28,7 @@ if status --is-interactive
 		case 'linux'
 			:
 		case '*'
-			if ! set -q TMUX
+			if ! set -q TMUX; and ! set -q VSCODE_IPC_HOOK_CLI
 				# ensure that the new tmux _also_ starts fish
 				exec tmux set-option -g default-shell (which fish) ';' new-session
 			end
