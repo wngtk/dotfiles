@@ -4,7 +4,7 @@
       relink: true
       force: true
 
-- clean: ['~', '~/.config']
+- clean: ['~', '~/.config', '~/.gemini']
 - link:
     ~/.dotfiles: ''
     ~/.gitconfig:
@@ -12,5 +12,6 @@
     ~/.vscodevimrc:
     ~/.config/nvim:
     ~/.config/fish/config.fish: fish/config.fish
+    ~/.gemini/GEMINI.md: agentic/AGENT.md
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
