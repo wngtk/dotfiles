@@ -56,7 +56,7 @@ end
 
 # Update dotfiles
 function dfu
-    cd ~/.dotfiles && git pull --ff-only && ./install -q
+    fish -c 'cd ~/.dotfiles && git pull --ff-only && ./install -q'
 end
 
 # Fish git prompt
