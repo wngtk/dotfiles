@@ -54,6 +54,11 @@ function d
 	end
 end
 
+# Update dotfiles
+function dfu
+    cd ~/.dotfiles && git pull --ff-only && ./install -q
+end
+
 # Fish git prompt
 set __fish_git_prompt_showuntrackedfiles 'yes'
 set __fish_git_prompt_showdirtystate 'yes'
