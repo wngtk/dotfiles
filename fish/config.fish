@@ -4,6 +4,7 @@ abbr -a m make
 abbr -a g git
 abbr -a gs git status
 abbr -a gl git log --oneline
+abbr -a lg lazygit
 
 if command -v eza > /dev/null
 	abbr -a l 'eza'
