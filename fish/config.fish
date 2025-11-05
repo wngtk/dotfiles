@@ -2,6 +2,7 @@ abbr -a e nvim
 abbr -a v vim
 abbr -a m make
 abbr -a g git
+abbr -a ga 'git add -p'
 abbr -a gs git status
 abbr -a gl git log --oneline
 abbr -a lg lazygit
