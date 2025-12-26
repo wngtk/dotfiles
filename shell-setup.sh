@@ -62,3 +62,10 @@ for crate in bat fd-find ripgrep eza tealdeer git-delta proximity-sort
 do
     $HOME/.cargo/bin/cargo install $crate
 done
+
+#######################
+# UV
+#######################
+if !command -v uv > /dev/null; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
