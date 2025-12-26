@@ -134,6 +134,8 @@ vim.keymap.set('n', '<leader>m', 'ct_')
 -- F1 is pretty close to Esc, so you probably meant Esc
 vim.keymap.set('', '<F1>', '<Esc>')
 vim.keymap.set('i', '<F1>', '<Esc>')
+-- edit $MYVIMRC
+vim.keymap.set('n', '<leader>`v', ':e $MYVIMRC<cr>')
 -- - |	-- split with leader
 vim.keymap.set('n', '<leader>-', ':sp<cr>')
 vim.keymap.set('n', '<leader>|', ':vsp<cr>')
@@ -151,6 +153,10 @@ autocmd!
 autocmd FileType javascript inoremap ==<Space> ===<Space>
 augroup END
 ]]
+-- Don't set 'modified' when reading from stdin
+--vim.cmd [[
+--au StdinReadPost * set nomodified
+--]]
 -- highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
     pattern = '*',

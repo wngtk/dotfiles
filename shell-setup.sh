@@ -66,6 +66,6 @@ done
 #######################
 # UV
 #######################
-if !command -v uv > /dev/null; then
+if [[ ! -f $HOME/.local/bin/uv ]]; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
