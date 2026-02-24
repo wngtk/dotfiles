@@ -116,6 +116,12 @@
 [url "https://github.com/"]
 	insteadOf = git://github.com/
 
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+
 # Allow local customizations in the .gitconfig_local file
 [include]
 	path = ~/.gitconfig_local
