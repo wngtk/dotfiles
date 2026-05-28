@@ -143,6 +143,14 @@ vim.keymap.set('n', '<leader>bd', '<cmd>bd<cr>')
 
 -------------------------------------------------------------------------------
 --
+-- configuring diagnostics
+--
+-------------------------------------------------------------------------------
+-- Allow virtual text
+vim.diagnostic.config({ virtual_text = true, virtual_lines = false })
+
+-------------------------------------------------------------------------------
+--
 -- autocommands
 --
 -------------------------------------------------------------------------------
@@ -415,6 +423,16 @@ require("lazy").setup({
 			if vim.fn.executable('ruff') == 1 then
 				vim.lsp.enable('ruff')
 			end
+
+            -- nil for nix
+			if vim.fn.executable('nil') == 1 then
+				vim.lsp.enable('nil_ls')
+			end
+
+            -- clangd for C/C++
+            if vim.fn.executable('clangd') == 1 then
+                vim.lsp.enable('clangd')
+            end
 
 			-- Global mappings.
 			-- See `:help vim.diagnostic.*` for documentation on any of the below functions
