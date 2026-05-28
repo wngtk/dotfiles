@@ -166,12 +166,17 @@ augroup END
 --au StdinReadPost * set nomodified
 --]]
 -- highlight yanked text
-vim.api.nvim_create_autocmd('TextYankPost', {
+vim.api.nvim_create_autocmd(
+	'TextYankPost',
+	{
     pattern = '*',
     command = 'silent! lua vim.highlight.on_yank({ timeout = 500 })'
-})
+	}
+)
 -- jump to last edit position on opening file
-vim.api.nvim_create_autocmd('BufReadPost', {
+vim.api.nvim_create_autocmd(
+	'BufReadPost',
+	{
     pattern = '*',
     callback = function(ev)
         if vim.fn.line("'\"") > 1 and vim.fn.line("'\"") <= vim.fn.line("$") then
@@ -182,10 +187,10 @@ vim.api.nvim_create_autocmd('BufReadPost', {
             end
         end
     end
-})
+	}
+)
 -- prevent accidental writes to buffers that shouldn't be edited
 vim.api.nvim_create_autocmd('BufRead', { pattern = '*.orig', command = 'set readonly' })
-vim.api.nvim_create_autocmd('BufRead', { pattern = '*.bk', command = 'set readonly' })
 vim.api.nvim_create_autocmd('BufRead', { pattern = '*.pacnew', command = 'set readonly' })
 -- leave paste mode when leaving insert mode (if it was on)
 vim.api.nvim_create_autocmd('InsertLeave', { pattern = '*', command = 'set nopaste' })
@@ -240,7 +245,7 @@ vim.api.nvim_create_autocmd('Filetype', {
 -- first, grab the manager
 -- https://github.com/folke/lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
+if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -262,7 +267,9 @@ require("lazy").setup({
             vim.cmd([[colorscheme gruvbox-dark-hard]])
             vim.cmd([[set termguicolors]])
             vim.o.background = 'dark'
-            -- XXX: hi Normal ctermbg=NONE
+			vim.cmd([[hi Normal ctermbg=NONE]])
+			-- Less visible window separator
+			vim.api.nvim_set_hl(0, "WinSeparator", { fg = 1250067 })
             -- Make comments more prominent -- they are important.
             local bools = vim.api.nvim_get_hl(0, { name = 'Boolean' })
             vim.api.nvim_set_hl(0, 'Comment', bools)
@@ -332,6 +339,34 @@ require("lazy").setup({
             vim.g.matchup_matchparen_offscreen = { method = "popup" }
         end
     },
+	-- option to center the editor
+	{
+		"shortcuts/no-neck-pain.nvim",
+		version = "*",
+		opts = {
+			mappings = {
+				enabled = true,
+				toggle = false,
+				toggleLeftSide = false,
+				toggleRightSide = false,
+				widthUp = false,
+				widthDown = false,
+				scratchPad = false,
+			}
+		},
+		config = function()
+			vim.keymap.set('', '<leader>t', function()
+				vim.cmd([[
+					:NoNeckPain
+					:set formatoptions-=tc linebreak tw=0 cc=0 wrap wm=20 noautoindent nocindent nosmartindent indentkeys=
+				]])
+				-- make 0, ^ and $ behave better in wrapped text
+				vim.keymap.set('n', '0', 'g0')
+				vim.keymap.set('n', '$', 'g$')
+				vim.keymap.set('n', '^', 'g^')
+			end)
+		end
+	},
     -- auto-cd to root of git project
     -- 'airblade/vim-rooter'
     {
@@ -342,41 +377,76 @@ require("lazy").setup({
     },
     -- fzf support for ^p
     {
-        'junegunn/fzf.vim',
-        dependencies = {
-            { 'junegunn/fzf', dir = '~/.fzf', build = './install --all' },
-        },
+        'ibhagwan/fzf-lua',
         config = function()
             -- stop putting a giant window over my editor
-            vim.g.fzf_layout = { down = '~20%' }
-            -- when using :Files, pass the file list through
-            --
-            --   https://github.com/jonhoo/proximity-sort
-            --
-            -- to prefer files closer to the current file.
-            function list_cmd()
-                local base = vim.fn.fnamemodify(vim.fn.expand('%'), ':h:.:S')
-                if base == '.' then
-                    -- if there is no current file,
-                    -- proximity-sort can't do its thing
-                    return 'fd --type file --follow'
-                else
-                    return vim.fn.printf('fd --type file --follow | proximity-sort %s', vim.fn.shellescape(vim.fn.expand('%')))
-                end
-            end
-            vim.api.nvim_create_user_command('Files', function(arg)
-                vim.fn['fzf#vim#files'](arg.qargs, { source = list_cmd(), options = '--tiebreak=index' }, arg.bang)
-            end, { bang = true, nargs = '?', complete = "dir" })
-        end
-    },
+            require'fzf-lua'.setup{
+                winopts = {
+					split = "belowright 10new",
+					preview = {
+						hidden = true,
+					}
+				},
+				files = {
+					-- file icons are distracting
+					file_icons = false,
+					-- git icons are nice
+					git_icons = true,
+					-- but don't mess up my anchored search
+					_fzf_nth_devicons = true,
+				},
+				buffers = {
+					file_icons = false,
+					git_icons = true,
+					-- no nth_devicons as we'll do that
+					-- manually since we also use
+					-- with-nth
+				},
+				fzf_opts = {
+					-- no reverse view
+					["--layout"] = "default",
+				},
+			}
+			-- when using C-p for quick file open, pass the file list through
+			--
+			--   https://github.com/jonhoo/proximity-sort
+			--
+			-- to prefer files closer to the current file.
+			vim.keymap.set('', '<C-p>', function()
+				opts = {}
+				opts.cmd = 'fd --color=never --hidden --type f --type l --exclude .git'
+				local base = vim.fn.fnamemodify(vim.fn.expand('%'), ':h:.:S')
+				if base ~= '.' then
+					-- if there is no current file,
+					-- proximity-sort can't do its thing
+					opts.cmd = opts.cmd .. (" | proximity-sort %s"):format(vim.fn.shellescape(vim.fn.expand('%')))
+				end
+				opts.fzf_opts = {
+				  ['--scheme']    = 'path',
+				  ['--tiebreak']  = 'index',
+				  ["--layout"]    = "default",
+				}
+				require'fzf-lua'.files(opts)
+			end)
+			-- use fzf to search buffers as well
+			vim.keymap.set('n', '<leader>;', function()
+				require'fzf-lua'.buffers({
+					-- just include the paths in the fzf bits, and nothing else
+					-- https://github.com/ibhagwan/fzf-lua/issues/2230#issuecomment-3164258823
+					fzf_opts = {
+					  ["--with-nth"]      = "{-3..-2}",
+					  ["--nth"]           = "-1",
+					  ["--delimiter"]     = "[:\u{2002}]",
+					  ["--header-lines"]  = "false",
+					},
+					header = false,
+				})
+			end)
+		end
+	},
     -- LSP
     {
         "neovim/nvim-lspconfig",
-        opts = {
-            servers = {
-                rust_analyzer = {}
-            }
-        },
         config = function()
 			-- Setup language servers.
 
@@ -580,17 +650,16 @@ require("lazy").setup({
             "nvim-treesitter/nvim-treesitter",
         },
     },
-    -- rust
-    {
-        'rust-lang/rust.vim',
-        ft = { "rust" },
-        config = function()
-            vim.g.rustfmt_autosave = 1
-            vim.g.rustfmt_emit_files = 1
-            vim.g.rustfmt_fail_silently = 0
-            vim.g.rust_clip_command = 'wl-copy'
-        end
-    },
+	-- latex
+	{
+		"lervag/vimtex",
+		ft = { "tex" },
+		lazy = false,     -- we don't want to lazy load VimTeX
+		init = function()
+			vim.g.vimtex_view_method = "zathura"
+			vim.g.vimtex_mappings_enabled = false
+		end
+	},
     -- fish
     'khaveesh/vim-fish-syntax',
     -- markdown
