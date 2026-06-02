@@ -14,5 +14,6 @@
     ~/.config/fish/config.fish: fish/config.fish
     ~/.gemini/GEMINI.md: agentic/gemini/GEMINI.md
     ~/.codex/AGENTS.md: agentic/AGENTS.md
+    ~/.claude/CLAUDE.md: agentic/claude/CLAUDE.md
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
