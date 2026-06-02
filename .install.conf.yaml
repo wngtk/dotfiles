@@ -12,6 +12,7 @@
     ~/.vscodevimrc:
     ~/.config/nvim:
     ~/.config/fish/config.fish: fish/config.fish
-    ~/.gemini/GEMINI.md: agentic/AGENT.md
+    ~/.gemini/GEMINI.md: agentic/gemini/GEMINI.md
+    ~/.codex/AGENTS.md: agentic/AGENTS.md
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
